@@ -1,0 +1,93 @@
+import { Button } from '@/components/ui/button';
+import { ChatStatus } from 'ai';
+import { ArrowUpIcon, StopCircleIcon } from 'lucide-react';
+import React, { memo } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { cn } from '@/lib/utils';
+
+export interface ChatSendButtonProps {
+  isAllowSend: boolean;
+  status: ChatStatus;
+  onClickSend: () => void | Promise<void>;
+  onClickStop: () => void | Promise<void>;
+}
+
+const variants = {
+  // 进入动画：从下方（y: 20）透明（opacity: 0）到原位（y: 0）不透明（opacity: 1）
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      y: { type: 'spring', stiffness: 800, damping: 30 }, // y方向使用弹簧动画
+      opacity: { duration: 0.1 },
+    },
+  },
+  // 初始状态（进入前）：在下方，透明
+  initialEnter: {
+    y: 20, // 从下方 20px 的位置开始
+    opacity: 0,
+  },
+  // 退出动画：向上方（y: -20）移动并透明（opacity: 0）
+  exit: {
+    y: -20, // 向上方 20px 的位置移动
+    opacity: 0,
+    transition: {
+      y: { type: 'spring', stiffness: 800, damping: 30 },
+      opacity: { duration: 0.1 },
+    },
+  },
+};
+
+const ChatSendButtonPure: React.FC<ChatSendButtonProps> = ({
+  isAllowSend,
+  status,
+  onClickSend,
+  onClickStop,
+}) => {
+  const isSending = status === 'streaming' || status === 'submitted';
+
+  return (
+    <Button
+      className={cn('p-4 rounded-full relative transition-all hover:opacity-80')}
+      size="icon"
+      onClick={(event) => {
+        event.preventDefault();
+
+        if (isSending) {
+          onClickStop();
+        } else {
+          onClickSend();
+        }
+      }}
+      disabled={!isSending && !isAllowSend}
+    >
+      <AnimatePresence>
+        {isSending ? (
+          <motion.div
+            key="stop"
+            variants={variants}
+            initial="initialEnter"
+            animate="enter"
+            exit="exit"
+            className="absolute"
+          >
+            <StopCircleIcon />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="send"
+            variants={variants}
+            initial="initialEnter"
+            animate="enter"
+            exit="exit"
+            className="absolute"
+          >
+            <ArrowUpIcon />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Button>
+  );
+};
+
+export const ChatSendButton = memo(ChatSendButtonPure);
