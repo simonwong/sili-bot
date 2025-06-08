@@ -130,7 +130,7 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({ sendMessage, stop, s
         value={input}
         onChange={onInput}
         className="min-h-[24px] max-h-[calc(35dvh)] overflow-y-auto resize-none !text-base
-          border-none outline-none shadow-none py-0 px-1
+          border-none outline-none shadow-none py-0 px-1 bg-transparent dark:bg-transparent
           ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0
           "
         rows={2}
