@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ChatStatus } from 'ai';
 import { ArrowUpIcon, StopCircleIcon } from 'lucide-react';
-import React, { memo } from 'react';
+import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 
@@ -38,7 +38,7 @@ const variants = {
   },
 };
 
-const ChatSendButtonPure: React.FC<ChatSendButtonProps> = ({
+export const ChatSendButton: React.FC<ChatSendButtonProps> = ({
   isAllowSend,
   status,
   onClickSend,
@@ -89,5 +89,3 @@ const ChatSendButtonPure: React.FC<ChatSendButtonProps> = ({
     </Button>
   );
 };
-
-export const ChatSendButton = memo(ChatSendButtonPure);

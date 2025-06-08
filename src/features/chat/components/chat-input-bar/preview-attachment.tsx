@@ -1,6 +1,4 @@
-import { memo } from 'react';
-
-export const PreviewAttachment = memo(({ attachment }: { attachment: File }) => {
+export const PreviewAttachment = ({ attachment }: { attachment: File }) => {
   const url = URL.createObjectURL(attachment);
   const name = attachment.name;
   const contentType = attachment.type;
@@ -28,6 +26,4 @@ export const PreviewAttachment = memo(({ attachment }: { attachment: File }) => 
       <div className="text-xs text-zinc-500 max-w-16 truncate">{name}</div>
     </div>
   );
-});
-
-PreviewAttachment.displayName = 'PreviewAttachment';
+};

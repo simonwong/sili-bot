@@ -91,7 +91,7 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({ sendMessage, stop, s
   const isSending = status === 'streaming' || status === 'submitted';
 
   return (
-    <div className="relative w-full bg-muted rounded-2xl p-2.5 pt-4 space-y-2">
+    <div className="relative w-full bg-muted rounded-2xl p-2.5 pt-4 space-y-2 border border-accent">
       {attachments.length > 0 && (
         <div
           data-testid="attachments-preview"
@@ -105,7 +105,7 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({ sendMessage, stop, s
       <Textarea
         data-testid="multimodal-input"
         ref={textareaRef}
-        placeholder="Send a message..."
+        placeholder="询问任何问题..."
         value={input}
         onChange={onInput}
         className="min-h-[24px] max-h-[calc(35dvh)] overflow-y-auto resize-none !text-base

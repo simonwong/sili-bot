@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { ChatStatus } from 'ai';
 import { PaperclipIcon } from 'lucide-react';
-import React, { memo, useRef } from 'react';
+import React, { useRef } from 'react';
 
 export interface UploadFileButtonProps {
   onAddFiles: (files: File[]) => void;
   status: ChatStatus;
 }
 
-const UploadFileButtonPure: React.FC<UploadFileButtonProps> = ({ onAddFiles, status }) => {
+export const UploadFileButton: React.FC<UploadFileButtonProps> = ({ onAddFiles, status }) => {
   const isSending = status === 'streaming' || status === 'submitted';
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -41,5 +41,3 @@ const UploadFileButtonPure: React.FC<UploadFileButtonProps> = ({ onAddFiles, sta
     </>
   );
 };
-
-export const UploadFileButton = memo(UploadFileButtonPure);
