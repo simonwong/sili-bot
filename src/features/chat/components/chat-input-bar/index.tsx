@@ -3,12 +3,12 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { PreviewAttachment } from './preview-attachment';
-import { ChatStatus } from 'ai';
+import { ChatStatus, FileUIPart, TextUIPart } from 'ai';
 import { ChatSendButton } from './chat-send-button';
 import { UploadFileButton } from './upload-file-button';
 
 export interface ChatInputBarProps {
-  sendMessage: (data: { text?: string; files?: File[] }) => Promise<void>;
+  sendMessage: (data: { textParts?: TextUIPart[]; fileParts?: FileUIPart[] }) => Promise<void>;
   stop: () => Promise<void>;
   status: ChatStatus;
 }
@@ -56,49 +56,70 @@ const useTextArea = () => {
   };
 };
 
-const useAttachments = () => {
-  const [attachments, setAttachments] = useState<File[]>([]);
+const useFileParts = () => {
+  const [fileParts, setFileParts] = useState<FileUIPart[]>([]);
 
-  const addAttachments = useCallback((files: File[]) => {
-    setAttachments((currentFiles) => [...currentFiles, ...files]);
+  const addFiles = useCallback(async (files: File[]) => {
+    const newFileParts: FileUIPart[] = [];
+
+    for (const file of files) {
+      newFileParts.push({
+        type: 'file',
+        mediaType: file.type,
+        filename: file.name,
+        url: `data:${file.type};base64,${btoa(
+          new Uint8Array(await file.arrayBuffer()).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ''
+          )
+        )}`,
+      });
+    }
+
+    setFileParts((currentFiles) => [...currentFiles, ...newFileParts]);
   }, []);
 
-  const resetAttachments = useCallback(() => {
-    setAttachments([]);
+  const resetFileParts = useCallback(() => {
+    setFileParts([]);
   }, []);
 
   return {
-    attachments,
-    addAttachments,
-    resetAttachments,
+    fileParts,
+    addFiles,
+    resetFileParts,
   };
 };
 
 export const ChatInputBar: React.FC<ChatInputBarProps> = ({ sendMessage, stop, status }) => {
   const { textareaRef, onInput, input, resetTextarea } = useTextArea();
-  const { attachments, addAttachments, resetAttachments } = useAttachments();
+  const { fileParts, addFiles, resetFileParts } = useFileParts();
 
   const handleClickSend = async () => {
     await sendMessage({
-      text: input,
-      files: attachments,
+      textParts: [
+        {
+          type: 'text',
+          text: input,
+        },
+      ],
+      fileParts,
     });
-    resetAttachments();
+    resetFileParts();
     resetTextarea();
   };
 
-  const isAllowSend = (input.length > 0 || attachments.length > 0) && status === 'ready';
+  const isAllowSend = (input.length > 0 || fileParts.length > 0) && status === 'ready';
   const isSending = status === 'streaming' || status === 'submitted';
 
   return (
     <div className="relative w-full bg-muted rounded-2xl p-2.5 pt-4 space-y-2 border border-accent">
-      {attachments.length > 0 && (
+      {fileParts.length > 0 && (
         <div
           data-testid="attachments-preview"
           className="flex flex-row gap-2 overflow-x-scroll items-end"
         >
-          {attachments.map((attachment, index) => (
-            <PreviewAttachment key={index} attachment={attachment} />
+          {fileParts.map((filePart, index) => (
+            <PreviewAttachment key={index} filePart={filePart} />
           ))}
         </div>
       )}
@@ -126,7 +147,7 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({ sendMessage, stop, s
       />
       <div className="w-full flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <UploadFileButton onAddFiles={addAttachments} status={status} />
+          <UploadFileButton onAddFiles={addFiles} status={status} />
         </div>
         <div>
           <ChatSendButton

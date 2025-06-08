@@ -1,7 +1,9 @@
-export const PreviewAttachment = ({ attachment }: { attachment: File }) => {
-  const url = URL.createObjectURL(attachment);
-  const name = attachment.name;
-  const contentType = attachment.type;
+import { FileUIPart } from 'ai';
+
+export const PreviewAttachment = ({ filePart }: { filePart: FileUIPart }) => {
+  const url = filePart.url;
+  const name = filePart.filename;
+  const contentType = filePart.mediaType;
 
   return (
     <div data-testid="input-attachment-preview" className="flex flex-col gap-2">
@@ -11,8 +13,7 @@ export const PreviewAttachment = ({ attachment }: { attachment: File }) => {
             // NOTE: it is recommended to use next/image for images
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              key={url}
-              src={url}
+              src={url as string}
               alt={name ?? 'An image attachment'}
               className="rounded-md size-full object-cover"
             />
