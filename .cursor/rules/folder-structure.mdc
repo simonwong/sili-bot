@@ -1,0 +1,64 @@
+---
+description: Guidelines for the file structure of this project
+globs: 
+alwaysApply: false
+---
+# 文件夹结构指南
+
+## 根目录结构
+```
+sili-bot/
+├── src/                    # 源代码目录
+├── public/                 # 静态资源
+├── .cursor/               # Cursor 配置
+├── .next/                 # Next.js 构建输出
+└── node_modules/          # 依赖包
+```
+
+## src/ 目录结构
+```
+src/
+├── app/                   # Next.js App Router
+│   ├── api/              # API 路由
+│   │   └── chat/         # 聊天 API
+│   ├── globals.css       # 全局样式
+│   ├── layout.tsx        # 根布局
+│   └── page.tsx          # 主页面
+├── components/           # 可复用组件
+│   ├── ui/              # UI 基础组件 (shadcn/ui)
+│   └── theme-provider.tsx # 主题提供者
+├── features/            # 功能模块
+│   ├── chat/             # chat 功能模块
+│   │   ├── components/   # chat 功能模块下的组件
+│   │   └── hooks/       # chat 功能模块下的hooks
+└── lib/                 # 工具库
+    └── utils.ts         # 通用工具函数
+```
+
+## 文件命名约定
+- **页面**: `page.tsx` (App Router 约定)
+- **布局**: `layout.tsx` (App Router 约定)
+- **API 路由**: `route.ts` (App Router 约定)
+- **组件**: KebabCase (如 `theme-provider.tsx`)
+- **工具函数**: camelCase (如 `utils.ts`)
+
+## 目录用途说明
+- **[app/](mdc:src/app)**: Next.js App Router 目录，包含页面和 API 路由
+- **[components/](mdc:src/components)**: 可复用的 React 组件
+- **@components/ui/**: shadcn/ui 基础组件库
+- **@features/**: 功能模块
+- **@features/chat/**: chat 功能模块
+- **@features/chat/components/**: chat 功能模块下的组件
+- **@features/chat/hooks/**: chat 功能模块下的hooks
+- **@hooks/**: 公共的hooks
+- **[lib/](mdc:src/lib)**: 工具函数和通用逻辑
+- **[public/](mdc:public)**: 静态资源文件 (图片、图标等)
+
+## 新文件放置指南
+- **新页面**: 在 `src/app/` 下创建对应目录和 `page.tsx`
+- **新 API**: 在 `src/app/api/` 下创建对应目录和 `route.ts`
+- **新组件**: 根据复用性放在 `src/components/` 或页面同级目录
+- **新功能模块**: 放在 `src/features/` 下创建对应的目录
+- **功能模块的新组件**: 放在 `src/features/功能模块` 下创建对应的目录
+- **工具函数**: 添加到 `src/lib/utils.ts` 或创建新的工具文件
+- **样式文件**: 全局样式放在 `src/app/globals.css`
