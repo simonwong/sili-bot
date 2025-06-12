@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
+import { TRPCReactProvider } from '@/trpc/react';
 
 import './globals.css';
 
@@ -33,7 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <TRPCReactProvider>{children}</TRPCReactProvider>
         </ThemeProvider>
       </body>
     </html>

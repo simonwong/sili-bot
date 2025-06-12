@@ -1,0 +1,22 @@
+import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+
+export const modelRouter = createTRPCRouter({
+  list: publicProcedure.query(() => {
+    return [
+      {
+        provider: 'Gemini',
+        logo: '/providers-logo/google.svg',
+        models: [
+          {
+            modelKey: 'gemini-2.5-flash-preview-05-20',
+            modelName: 'Gemini 2.5 Flash Preview',
+          },
+          {
+            modelKey: 'gemini-2.5-pro-preview-05-06',
+            modelName: 'Gemini 2.5 Pro Preview',
+          },
+        ],
+      },
+    ];
+  }),
+});
