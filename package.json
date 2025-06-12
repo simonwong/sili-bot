@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/google": "2.0.0-alpha.10",
     "@ai-sdk/react": "2.0.0-alpha.10",
+    "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.3",
     "@tanstack/react-query": "^5.80.7",
     "@trpc/client": "^11.3.1",
@@ -31,7 +32,8 @@
     "superjson": "^2.2.2",
     "swr": "^2.3.3",
     "tailwind-merge": "^3.3.0",
-    "zod": "^3.25.62"
+    "zod": "^3.25.62",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,15 +1,23 @@
 'use client';
 
 import { ChatInputBar, Messages } from '@/features/chat';
+import { ModelSelect } from '@/features/model';
 import { cn } from '@/lib/utils';
+import { useModelStore } from '@/store';
 import { useChat } from '@ai-sdk/react';
-import { UIDataTypes, UIMessagePart } from 'ai';
+import { DefaultChatTransport, UIDataTypes, UIMessagePart } from 'ai';
 
 export default function Chat() {
   const chatId = 'temporary-chat';
-
   const { messages, sendMessage, status, stop } = useChat({
     id: chatId,
+    transport: new DefaultChatTransport({
+      prepareRequest: ({ id, messages }) => {
+        return {
+          body: { id, messages, model: useModelStore.getState().model },
+        };
+      },
+    }),
     messages: [
       // {
       //   role: 'user',
@@ -43,30 +51,38 @@ export default function Chat() {
       // },
     ],
   });
+
   return (
-    <div
-      className={cn(
-        'max-full h-screen flex flex-col m-auto px-4',
-        messages.length === 0 && 'justify-center'
-      )}
-    >
-      <Messages messages={messages} chatId={chatId} status={status} />
-      <div className="mb-12">
-        <div className="max-w-2xl mx-auto">
-          <ChatInputBar
-            status={status}
-            stop={stop}
-            sendMessage={async (data) => {
-              const userParts: UIMessagePart<UIDataTypes>[] = [
-                ...(data.fileParts ?? []),
-                ...(data.textParts ?? []),
-              ];
-              return sendMessage({
-                role: 'user',
-                parts: userParts,
-              });
-            }}
-          />
+    <div>
+      <div className={cn('flex-1 h-screen flex flex-col')}>
+        <div>
+          <ModelSelect />
+        </div>
+        <div
+          className={cn(
+            'w-full flex-1 flex flex-col m-auto px-4',
+            messages.length === 0 && 'justify-center'
+          )}
+        >
+          <Messages messages={messages} chatId={chatId} status={status} />
+          <div className="mb-12">
+            <div className="max-w-2xl mx-auto">
+              <ChatInputBar
+                status={status}
+                stop={stop}
+                sendMessage={async (data) => {
+                  const userParts: UIMessagePart<UIDataTypes>[] = [
+                    ...(data.fileParts ?? []),
+                    ...(data.textParts ?? []),
+                  ];
+                  return sendMessage({
+                    role: 'user',
+                    parts: userParts,
+                  });
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

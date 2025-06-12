@@ -1,13 +1,25 @@
 import { google } from '@ai-sdk/google';
 import { convertToModelMessages, streamText, UIMessage } from 'ai';
 
-const FlashModel = 'gemini-2.5-flash-preview-05-20';
-
 export async function POST(request: Request) {
-  const { messages }: { messages: UIMessage[] } = await request.json();
+  const {
+    messages,
+    model,
+  }: {
+    messages: UIMessage[];
+    model: {
+      provider: string;
+      modelKey: string;
+    } | null;
+    id: string;
+  } = await request.json();
+
+  if (!model) {
+    return new Response('Model is required', { status: 400 });
+  }
 
   const result = streamText({
-    model: google(FlashModel),
+    model: google(model.modelKey),
     messages: convertToModelMessages(messages),
   });
 
