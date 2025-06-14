@@ -2,7 +2,7 @@ import { ModelSelect } from '@/features/model';
 import { cn, generateUUID } from '@/lib/utils';
 
 import { Chat } from '@/features/chat';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarTrigger } from '@/components/animate-ui/radix/sidebar';
 
 export default function SiliBotApp() {
   const chatId = generateUUID();

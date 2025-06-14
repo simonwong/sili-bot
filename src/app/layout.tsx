@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { TRPCReactProvider } from '@/trpc/react';
 
 import './globals.css';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/animate-ui/radix/sidebar';
 import { AppSidebar } from '@/features/sidebar';
 
 const geistSans = Geist({

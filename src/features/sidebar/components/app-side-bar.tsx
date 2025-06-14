@@ -11,7 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar';
+} from '@/components/animate-ui/radix/sidebar';
 import { AppLogo } from './app-logo';
 import { useRouter } from 'next/navigation';
 import { api } from '@/trpc/react';

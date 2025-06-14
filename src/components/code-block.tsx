@@ -3,7 +3,7 @@
 import { type Components } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { CopyButton } from '@/components/copy-button';
+import { CopyButton } from '@/components/animate-ui/buttons/copy';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const CodeBlock: Components['code'] = ({ node, className, children, ...props }) => {
@@ -13,7 +13,7 @@ export const CodeBlock: Components['code'] = ({ node, className, children, ...pr
     return (
       <div className="relative">
         <div className="absolute top-2 right-2 z-10">
-          <CopyButton text={codeText} />
+          <CopyButton variant="outline" content={codeText} />
         </div>
         <SyntaxHighlighter className="rounded-lg!" language={match[1]} style={oneLight}>
           {codeText}

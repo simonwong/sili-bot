@@ -2,7 +2,7 @@ import { ModelSelect } from '@/features/model';
 import { cn } from '@/lib/utils';
 
 import { Chat } from '@/features/chat';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarTrigger } from '@/components/animate-ui/radix/sidebar';
 import { api } from '@/trpc/server';
 
 export default async function ChatPage(props: { params: Promise<{ id: string }> }) {
