@@ -8,7 +8,7 @@ export default function SiliBotApp() {
   const chatId = generateUUID();
 
   return (
-    <div className={cn('flex-1 h-screen flex flex-col')}>
+    <div className={cn('flex-1 h-screen max-h-screen flex flex-col')}>
       <div className="px-4 py-2 flex items-center gap-2">
         <SidebarTrigger />
         <ModelSelect />
