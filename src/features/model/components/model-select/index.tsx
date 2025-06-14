@@ -11,7 +11,14 @@ import {
 } from '@/components/ui/select';
 import { useModelStore } from '@/store';
 import { api } from '@/trpc/react';
+import Image from 'next/image';
 import React, { useEffect } from 'react';
+
+// logo: '/providers-logo/google.svg',
+
+const providerLogo = {
+  Gemini: '/providers-logo/google.svg',
+};
 
 export const ModelSelect = () => {
   const { data } = api.model.list.useQuery();
@@ -48,7 +55,17 @@ export const ModelSelect = () => {
         {data?.map((item) => {
           return (
             <SelectGroup key={item.provider}>
-              <SelectLabel>{item.provider}</SelectLabel>
+              <SelectLabel className="flex items-center gap-2">
+                {providerLogo[item.provider as keyof typeof providerLogo] && (
+                  <Image
+                    src={providerLogo[item.provider as keyof typeof providerLogo]}
+                    alt={item.provider}
+                    width={16}
+                    height={16}
+                  />
+                )}
+                {item.provider}
+              </SelectLabel>
               {item.models.map((model) => {
                 return (
                   <SelectItem key={model.modelKey} value={model.modelKey}>

@@ -5,7 +5,6 @@ export const modelRouter = createTRPCRouter({
     return [
       {
         provider: 'Gemini',
-        logo: '/providers-logo/google.svg',
         models: [
           {
             modelKey: 'gemini-2.5-flash-preview-05-20',
