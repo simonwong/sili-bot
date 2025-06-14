@@ -86,6 +86,9 @@ const components: Partial<Components> = {
       </h6>
     );
   },
+  hr: ({ ...props }) => {
+    return <hr className="my-4 border-zinc-200 dark:border-zinc-700" {...props} />;
+  },
 };
 
 const remarkPlugins = [remarkGfm];
