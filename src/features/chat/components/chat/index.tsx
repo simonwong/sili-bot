@@ -4,12 +4,16 @@ import { ChatInputBar, Messages } from '@/features/chat';
 import { cn } from '@/lib/utils';
 import { useModelStore } from '@/store';
 import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport, UIDataTypes, UIMessagePart } from 'ai';
+import { DefaultChatTransport, UIDataTypes, UIMessage, UIMessagePart } from 'ai';
 
-export const Chat = () => {
-  const chatId = 'temporary-chat';
+export interface ChatProps {
+  id: string;
+  initialMessages?: UIMessage[];
+}
+
+export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
   const { messages, sendMessage, status, stop } = useChat({
-    id: chatId,
+    id,
     transport: new DefaultChatTransport({
       prepareRequest: ({ id, messages }) => {
         return {
@@ -17,8 +21,9 @@ export const Chat = () => {
         };
       },
     }),
-    messages: [],
+    messages: initialMessages,
   });
+
   return (
     <div
       className={cn(
@@ -26,7 +31,7 @@ export const Chat = () => {
         messages.length === 0 && 'justify-center'
       )}
     >
-      <Messages messages={messages} chatId={chatId} status={status} />
+      <Messages messages={messages} chatId={id} status={status} />
       <div className="mb-12">
         <div className="max-w-2xl mx-auto">
           <ChatInputBar

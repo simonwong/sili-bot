@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Greeting } from './greeting';
 import { ChatStatus, UIMessage } from 'ai';

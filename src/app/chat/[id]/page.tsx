@@ -1,15 +1,14 @@
-'use client';
-
 import { ModelSelect } from '@/features/model';
 import { cn } from '@/lib/utils';
 
 import { Chat } from '@/features/chat';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { useParams } from 'next/navigation';
+import { api } from '@/trpc/server';
 
-export default function ChatPage() {
-  const { id } = useParams();
-  console.log(id);
+export default async function ChatPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params;
+
+  const serverMessages = await api.message.list({ id });
 
   return (
     <div className={cn('flex-1 h-screen flex flex-col')}>
@@ -17,7 +16,7 @@ export default function ChatPage() {
         <SidebarTrigger />
         <ModelSelect />
       </div>
-      <Chat />
+      <Chat initialMessages={serverMessages} id={id} />
     </div>
   );
 }
