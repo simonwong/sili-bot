@@ -1,0 +1,50 @@
+'use client';
+
+import { ChatInputBar, Messages } from '@/features/chat';
+import { cn } from '@/lib/utils';
+import { useModelStore } from '@/store';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, UIDataTypes, UIMessagePart } from 'ai';
+
+export const Chat = () => {
+  const chatId = 'temporary-chat';
+  const { messages, sendMessage, status, stop } = useChat({
+    id: chatId,
+    transport: new DefaultChatTransport({
+      prepareRequest: ({ id, messages }) => {
+        return {
+          body: { id, messages, model: useModelStore.getState().model },
+        };
+      },
+    }),
+    messages: [],
+  });
+  return (
+    <div
+      className={cn(
+        'w-full flex-1 flex flex-col m-auto px-4 overflow-hidden',
+        messages.length === 0 && 'justify-center'
+      )}
+    >
+      <Messages messages={messages} chatId={chatId} status={status} />
+      <div className="mb-12">
+        <div className="max-w-2xl mx-auto">
+          <ChatInputBar
+            status={status}
+            stop={stop}
+            sendMessage={async (data) => {
+              const userParts: UIMessagePart<UIDataTypes>[] = [
+                ...(data.fileParts ?? []),
+                ...(data.textParts ?? []),
+              ];
+              return sendMessage({
+                role: 'user',
+                parts: userParts,
+              });
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
