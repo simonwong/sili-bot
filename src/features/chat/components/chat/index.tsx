@@ -38,10 +38,16 @@ export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
             status={status}
             stop={stop}
             sendMessage={async (data) => {
-              const userParts: UIMessagePart<UIDataTypes>[] = [
-                ...(data.fileParts ?? []),
-                ...(data.textParts ?? []),
-              ];
+              const userParts: UIMessagePart<
+                UIDataTypes,
+                Record<
+                  string,
+                  {
+                    args: unknown;
+                    result: unknown | undefined;
+                  }
+                >
+              >[] = [...(data.fileParts ?? []), ...(data.textParts ?? [])];
               return sendMessage({
                 role: 'user',
                 parts: userParts,
