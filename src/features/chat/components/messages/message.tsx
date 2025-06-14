@@ -38,7 +38,7 @@ export const Message: React.FC<MessageProps> = ({ message, requiresScrollPadding
         {textParts.map((text, i) => {
           return (
             <div
-              className={cn(isUser && 'bg-muted rounded-3xl px-5 py-2')}
+              className={cn('max-w-full', isUser && 'bg-muted rounded-3xl px-5 py-2')}
               key={`${message.id}-text-${i}`}
             >
               <Markdown>{text.text}</Markdown>
