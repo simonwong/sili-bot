@@ -1,10 +1,10 @@
 'use client';
 
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, type UIMessage } from 'ai';
 import { ChatInputBar, Messages } from '@/features/chat';
 import { cn } from '@/lib/utils';
 import { useModelStore } from '@/store';
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport, UIDataTypes, UIMessage, UIMessagePart } from 'ai';
 
 export interface ChatProps {
   id: string;
@@ -15,9 +15,13 @@ export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
   const { messages, sendMessage, status, stop } = useChat({
     id,
     transport: new DefaultChatTransport({
-      prepareRequest: ({ id, messages }) => {
+      prepareSendMessagesRequest: (options) => {
         return {
-          body: { id, messages, model: useModelStore.getState().model },
+          body: {
+            id: options.id,
+            messages: options.messages,
+            model: useModelStore.getState().model,
+          },
         };
       },
     }),
@@ -27,32 +31,27 @@ export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
   return (
     <div
       className={cn(
-        'w-full flex-1 flex flex-col m-auto px-4 overflow-hidden',
+        'm-auto flex w-full flex-1 flex-col overflow-hidden px-4',
         messages.length === 0 && 'justify-center'
       )}
     >
-      <Messages messages={messages} chatId={id} status={status} />
+      <Messages chatId={id} messages={messages} status={status} />
       <div className="mb-12">
-        <div className="max-w-2xl mx-auto">
+        <div className="mx-auto max-w-2xl">
           <ChatInputBar
-            status={status}
-            stop={stop}
-            sendMessage={async (data) => {
-              const userParts: UIMessagePart<
-                UIDataTypes,
-                Record<
-                  string,
-                  {
-                    args: unknown;
-                    result: unknown | undefined;
-                  }
-                >
-              >[] = [...(data.fileParts ?? []), ...(data.textParts ?? [])];
+            chatId={id}
+            sendMessage={(data) => {
+              const userParts: UIMessage['parts'] = [
+                ...(data.fileParts ?? []),
+                ...(data.textParts ?? []),
+              ];
               return sendMessage({
                 role: 'user',
                 parts: userParts,
               });
             }}
+            status={status}
+            stop={stop}
           />
         </div>
       </div>

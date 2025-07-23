@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import { useEffect } from 'react';
 import {
   Select,
   SelectContent,
@@ -11,8 +13,6 @@ import {
 } from '@/components/ui/select';
 import { useModelStore } from '@/store';
 import { api } from '@/trpc/react';
-import Image from 'next/image';
-import React, { useEffect } from 'react';
 
 // logo: '/providers-logo/google.svg',
 
@@ -35,7 +35,6 @@ export const ModelSelect = () => {
 
   return (
     <Select
-      value={model?.modelKey ?? undefined}
       onValueChange={(value) => {
         const providerItem = data?.find((item) =>
           item.models.some((model) => model.modelKey === value)
@@ -47,6 +46,7 @@ export const ModelSelect = () => {
           });
         }
       }}
+      value={model?.modelKey ?? undefined}
     >
       <SelectTrigger className="min-w-[180px]">
         <SelectValue placeholder="Select Model" />
@@ -58,10 +58,12 @@ export const ModelSelect = () => {
               <SelectLabel className="flex items-center gap-2">
                 {providerLogo[item.provider as keyof typeof providerLogo] && (
                   <Image
-                    src={providerLogo[item.provider as keyof typeof providerLogo]}
                     alt={item.provider}
-                    width={16}
                     height={16}
+                    src={
+                      providerLogo[item.provider as keyof typeof providerLogo]
+                    }
+                    width={16}
                   />
                 )}
                 {item.provider}

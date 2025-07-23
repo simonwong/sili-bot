@@ -1,16 +1,21 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import type { ChatStatus, FileUIPart, TextUIPart } from 'ai';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
-import { PreviewAttachment } from './preview-attachment';
-import { ChatStatus, FileUIPart, TextUIPart } from 'ai';
 import { ChatSendButton } from './chat-send-button';
+import { PreviewAttachment } from './preview-attachment';
 import { UploadFileButton } from './upload-file-button';
 
 export interface ChatInputBarProps {
-  sendMessage: (data: { textParts?: TextUIPart[]; fileParts?: FileUIPart[] }) => Promise<void>;
+  sendMessage: (data: {
+    textParts?: TextUIPart[];
+    fileParts?: FileUIPart[];
+  }) => Promise<void>;
   stop: () => Promise<void>;
   status: ChatStatus;
+  chatId: string;
 }
 
 const useTextArea = () => {
@@ -90,11 +95,17 @@ const useFileParts = () => {
   };
 };
 
-export const ChatInputBar: React.FC<ChatInputBarProps> = ({ sendMessage, stop, status }) => {
+export const ChatInputBar: React.FC<ChatInputBarProps> = ({
+  sendMessage,
+  stop,
+  status,
+  chatId,
+}) => {
   const { textareaRef, onInput, input, resetTextarea } = useTextArea();
   const { fileParts, addFiles, resetFileParts } = useFileParts();
 
   const handleClickSend = async () => {
+    window.history.replaceState({}, '', `/chat/${chatId}`);
     await sendMessage({
       textParts: [
         {
@@ -106,55 +117,59 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({ sendMessage, stop, s
     });
     resetFileParts();
     resetTextarea();
+
+    textareaRef.current?.focus();
   };
 
-  const isAllowSend = (input.length > 0 || fileParts.length > 0) && status === 'ready';
+  const isAllowSend =
+    (input.length > 0 || fileParts.length > 0) && status === 'ready';
   const isSending = status === 'streaming' || status === 'submitted';
 
   return (
-    <div className="relative w-full bg-muted rounded-2xl p-2.5 pt-4 space-y-2 border border-accent">
+    <div className="relative w-full space-y-2 rounded-2xl border border-accent bg-muted p-2.5 pt-4">
       {fileParts.length > 0 && (
         <div
+          className="flex flex-row items-end gap-2 overflow-x-scroll"
           data-testid="attachments-preview"
-          className="flex flex-row gap-2 overflow-x-scroll items-end"
         >
           {fileParts.map((filePart, index) => (
-            <PreviewAttachment key={index} filePart={filePart} />
+            <PreviewAttachment filePart={filePart} key={index} />
           ))}
         </div>
       )}
       <Textarea
-        data-testid="multimodal-input"
-        ref={textareaRef}
-        placeholder="询问任何问题..."
-        value={input}
-        onChange={onInput}
-        className="min-h-[24px] max-h-[calc(35dvh)] overflow-y-auto resize-none !text-base
-          border-none outline-none shadow-none py-0 px-1 bg-transparent dark:bg-transparent
-          ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0
-          "
-        rows={2}
         autoFocus
+        className="!text-base max-h-[calc(35dvh)] min-h-[24px] resize-none overflow-y-auto border-none bg-transparent px-1 py-0 shadow-none outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent "
+        data-testid="multimodal-input"
         disabled={isSending}
+        onChange={onInput}
         onKeyDown={(event) => {
-          if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+          if (
+            event.key === 'Enter' &&
+            !event.shiftKey &&
+            !event.nativeEvent.isComposing
+          ) {
             event.preventDefault();
             if (isAllowSend) {
               handleClickSend();
             }
           }
         }}
+        placeholder="询问任何问题..."
+        ref={textareaRef}
+        rows={2}
+        value={input}
       />
-      <div className="w-full flex justify-between items-center">
+      <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <UploadFileButton onAddFiles={addFiles} status={status} />
         </div>
         <div>
           <ChatSendButton
             isAllowSend={isAllowSend}
-            status={status}
             onClickSend={handleClickSend}
             onClickStop={stop}
+            status={status}
           />
         </div>
       </div>

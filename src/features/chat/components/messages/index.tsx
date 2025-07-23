@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
-import { Greeting } from './greeting';
-import { ChatStatus, UIMessage } from 'ai';
+import type { ChatStatus, UIMessage } from 'ai';
 import { motion } from 'motion/react';
+import type React from 'react';
 import { cn } from '@/lib/utils';
-import { Message } from './message';
 import { useMessages } from '../../hooks/use-messages';
+import { Greeting } from './greeting';
+import { Message } from './message';
 import { ThinkingMessage } from './thinking-message';
 
 export interface MessagesProps {
@@ -15,7 +15,11 @@ export interface MessagesProps {
   status: ChatStatus;
 }
 
-export const Messages: React.FC<MessagesProps> = ({ messages, chatId, status }) => {
+export const Messages: React.FC<MessagesProps> = ({
+  messages,
+  chatId,
+  status,
+}) => {
   const {
     containerRef: messagesContainerRef,
     endRef: messagesEndRef,
@@ -28,11 +32,11 @@ export const Messages: React.FC<MessagesProps> = ({ messages, chatId, status }) 
   });
   return (
     <div
-      ref={messagesContainerRef}
       className={cn(
-        'flex flex-col gap-6 overflow-y-scroll relative',
+        'relative flex flex-col gap-6 overflow-y-scroll',
         messages.length > 0 && 'flex-1'
       )}
+      ref={messagesContainerRef}
     >
       {messages.length === 0 && <Greeting />}
       {messages.length > 0 && (
@@ -42,7 +46,9 @@ export const Messages: React.FC<MessagesProps> = ({ messages, chatId, status }) 
               <Message
                 key={message.id}
                 message={message}
-                requiresScrollPadding={hasSentMessage && index === messages.length - 1}
+                requiresScrollPadding={
+                  hasSentMessage && index === messages.length - 1
+                }
               />
             );
           })}
@@ -51,13 +57,13 @@ export const Messages: React.FC<MessagesProps> = ({ messages, chatId, status }) 
 
       {status === 'submitted' &&
         messages.length > 0 &&
-        messages[messages.length - 1].role === 'user' && <ThinkingMessage />}
+        messages.at(-1).role === 'user' && <ThinkingMessage />}
 
       <motion.div
-        ref={messagesEndRef}
-        className="shrink-0 min-w-[24px] min-h-[24px]"
-        onViewportLeave={onViewportLeave}
+        className="min-h-[24px] min-w-[24px] shrink-0"
         onViewportEnter={onViewportEnter}
+        onViewportLeave={onViewportLeave}
+        ref={messagesEndRef}
       />
     </div>
   );

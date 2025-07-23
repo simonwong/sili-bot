@@ -4,7 +4,10 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { TRPCReactProvider } from '@/trpc/react';
 
 import './globals.css';
-import { SidebarInset, SidebarProvider } from '@/components/animate-ui/radix/sidebar';
+import {
+  SidebarInset,
+  SidebarProvider,
+} from '@/components/animate-ui/radix/sidebar';
 import { AppSidebar } from '@/features/sidebar';
 
 const geistSans = Geist({
@@ -29,12 +32,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
-          enableSystem
           disableTransitionOnChange
+          enableSystem
         >
           <TRPCReactProvider>
             <SidebarProvider>

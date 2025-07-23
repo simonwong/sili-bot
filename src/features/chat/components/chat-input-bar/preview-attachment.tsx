@@ -1,4 +1,4 @@
-import { FileUIPart } from 'ai';
+import type { FileUIPart } from 'ai';
 
 export const PreviewAttachment = ({ filePart }: { filePart: FileUIPart }) => {
   const url = filePart.url;
@@ -6,17 +6,19 @@ export const PreviewAttachment = ({ filePart }: { filePart: FileUIPart }) => {
   const contentType = filePart.mediaType;
 
   return (
-    <div data-testid="input-attachment-preview" className="flex flex-col gap-2">
-      <div className="w-20 h-16 aspect-video bg-muted rounded-md relative flex flex-col items-center justify-center">
+    <div className="flex flex-col gap-2" data-testid="input-attachment-preview">
+      <div className="relative flex aspect-video h-16 w-20 flex-col items-center justify-center rounded-md bg-muted">
         {contentType ? (
           contentType.startsWith('image') ? (
             // NOTE: it is recommended to use next/image for images
             // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={url as string}
-              alt={name ?? 'An image attachment'}
-              className="rounded-md size-full object-cover"
-            />
+            <picture>
+              <img
+                alt={name ?? 'An image attachment'}
+                className="size-full rounded-md object-cover"
+                src={url as string}
+              />
+            </picture>
           ) : (
             <div className="" />
           )
@@ -24,7 +26,7 @@ export const PreviewAttachment = ({ filePart }: { filePart: FileUIPart }) => {
           <div className="" />
         )}
       </div>
-      <div className="text-xs text-zinc-500 max-w-16 truncate">{name}</div>
+      <div className="max-w-16 truncate text-xs text-zinc-500">{name}</div>
     </div>
   );
 };

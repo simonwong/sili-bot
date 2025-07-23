@@ -1,7 +1,7 @@
 'use client';
 
+import { useCallback, useEffect, useRef } from 'react';
 import useSWR from 'swr';
-import { useRef, useEffect, useCallback } from 'react';
 
 type ScrollFlag = ScrollBehavior | false;
 
@@ -15,11 +15,8 @@ export function useScrollToBottom() {
     { fallbackData: false }
   );
 
-  const { data: scrollBehavior = false, mutate: setScrollBehavior } = useSWR<ScrollFlag>(
-    'messages:should-scroll',
-    null,
-    { fallbackData: false }
-  );
+  const { data: scrollBehavior = false, mutate: setScrollBehavior } =
+    useSWR<ScrollFlag>('messages:should-scroll', null, { fallbackData: false });
 
   useEffect(() => {
     if (scrollBehavior) {

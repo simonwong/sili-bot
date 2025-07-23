@@ -1,40 +1,44 @@
-import { Button } from '@/components/ui/button';
-import { ChatStatus } from 'ai';
+import type { ChatStatus } from 'ai';
 import { PaperclipIcon } from 'lucide-react';
-import React, { useRef } from 'react';
+import type React from 'react';
+import { useRef } from 'react';
+import { Button } from '@/components/ui/button';
 
 export interface UploadFileButtonProps {
   onAddFiles: (files: File[]) => void;
   status: ChatStatus;
 }
 
-export const UploadFileButton: React.FC<UploadFileButtonProps> = ({ onAddFiles, status }) => {
+export const UploadFileButton: React.FC<UploadFileButtonProps> = ({
+  onAddFiles,
+  status,
+}) => {
   const isSending = status === 'streaming' || status === 'submitted';
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
       <input
-        type="file"
-        className="hidden pointer-events-none"
-        ref={fileInputRef}
+        className="pointer-events-none hidden"
         multiple
         onChange={(event) => {
           const files = Array.from(event.target.files || []);
 
           onAddFiles(files);
         }}
+        ref={fileInputRef}
         tabIndex={-1}
+        type="file"
       />
       <Button
+        className="h-6 w-6"
+        disabled={isSending}
         onClick={(event) => {
           event.preventDefault();
           fileInputRef.current?.click();
         }}
-        variant="ghost"
         size="icon"
-        className="w-6 h-6"
-        disabled={isSending}
+        variant="ghost"
       >
         <PaperclipIcon />
       </Button>

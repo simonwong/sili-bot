@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { CheckIcon, CopyIcon } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 interface CopyButtonProps {
@@ -9,11 +9,16 @@ interface CopyButtonProps {
   className?: string;
 }
 
-export const CopyButton: React.FC<CopyButtonProps> = ({ text, className = '' }) => {
+export const CopyButton: React.FC<CopyButtonProps> = ({
+  text,
+  className = '',
+}) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
-    if (isCopied) return;
+    if (isCopied) {
+      return;
+    }
 
     try {
       await navigator.clipboard.writeText(text);
@@ -23,18 +28,16 @@ export const CopyButton: React.FC<CopyButtonProps> = ({ text, className = '' }) 
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
-    } catch (error) {
-      console.error('复制失败:', error);
-    }
+    } catch (_error) {}
   };
 
   return (
     <Button
-      variant="ghost"
-      size="icon"
+      className={`h-8 w-8 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 ${className}`}
       onClick={handleCopy}
-      className={`h-8 w-8 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 ${className}`}
+      size="icon"
       title={isCopied ? 'Copied' : 'Copy'}
+      variant="ghost"
     >
       {isCopied ? (
         <CheckIcon className="h-4 w-4 text-green-600 dark:text-green-400" />

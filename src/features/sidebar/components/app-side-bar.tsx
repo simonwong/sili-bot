@@ -1,6 +1,7 @@
 'use client';
 import { MessageSquareDashedIcon } from 'lucide-react';
-
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -12,10 +13,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/animate-ui/radix/sidebar';
-import { AppLogo } from './app-logo';
-import { useRouter } from 'next/navigation';
 import { api } from '@/trpc/react';
-import Link from 'next/link';
+import { AppLogo } from './app-logo';
 
 export const AppSidebar = () => {
   const router = useRouter();
@@ -24,7 +23,11 @@ export const AppSidebar = () => {
   return (
     <Sidebar variant="floating">
       <SidebarHeader className="flex">
-        <AppLogo size={45} className="cursor-pointer" onClick={() => router.push('/')} />
+        <AppLogo
+          className="cursor-pointer"
+          onClick={() => router.push('/')}
+          size={45}
+        />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

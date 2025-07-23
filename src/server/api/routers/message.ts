@@ -1,6 +1,6 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import { InferUIDataParts, UIDataPartSchemas, UIMessage } from 'ai';
+import type { InferUIDataParts, UIDataPartSchemas, UIMessage } from 'ai';
 import { z } from 'zod';
+import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
 export const messageRouter = createTRPCRouter({
   list: publicProcedure
@@ -10,7 +10,6 @@ export const messageRouter = createTRPCRouter({
       })
     )
     .query(({ input }) => {
-      console.log('id', input.id);
       let data: UIMessage<unknown, InferUIDataParts<UIDataPartSchemas>>[] = [];
 
       if (input.id === 'markdown-conversation-vomwerjweasm') {
@@ -145,7 +144,9 @@ print(factorial(5)) # Output: 120
           {
             role: 'assistant',
             id: '2',
-            parts: [{ type: 'text', text: 'Good Morning, how can I help you today?' }],
+            parts: [
+              { type: 'text', text: 'Good Morning, how can I help you today?' },
+            ],
           },
         ];
       }

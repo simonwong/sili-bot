@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button';
-import { ChatStatus } from 'ai';
+import type { ChatStatus } from 'ai';
 import { ArrowUpIcon, StopCircleIcon } from 'lucide-react';
-import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import type React from 'react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export interface ChatSendButtonProps {
@@ -48,8 +48,10 @@ export const ChatSendButton: React.FC<ChatSendButtonProps> = ({
 
   return (
     <Button
-      className={cn('p-4 rounded-full relative transition-all hover:opacity-80')}
-      size="icon"
+      className={cn(
+        'relative rounded-full p-4 transition-all hover:opacity-80'
+      )}
+      disabled={!(isSending || isAllowSend)}
       onClick={(event) => {
         event.preventDefault();
 
@@ -59,28 +61,28 @@ export const ChatSendButton: React.FC<ChatSendButtonProps> = ({
           onClickSend();
         }
       }}
-      disabled={!isSending && !isAllowSend}
+      size="icon"
     >
       <AnimatePresence>
         {isSending ? (
           <motion.div
+            animate="enter"
+            className="absolute"
+            exit="exit"
+            initial="initialEnter"
             key="stop"
             variants={variants}
-            initial="initialEnter"
-            animate="enter"
-            exit="exit"
-            className="absolute"
           >
             <StopCircleIcon />
           </motion.div>
         ) : (
           <motion.div
+            animate="enter"
+            className="absolute"
+            exit="exit"
+            initial="initialEnter"
             key="send"
             variants={variants}
-            initial="initialEnter"
-            animate="enter"
-            exit="exit"
-            className="absolute"
           >
             <ArrowUpIcon />
           </motion.div>
