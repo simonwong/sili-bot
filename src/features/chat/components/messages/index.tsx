@@ -57,7 +57,7 @@ export const Messages: React.FC<MessagesProps> = ({
 
       {status === 'submitted' &&
         messages.length > 0 &&
-        messages.at(-1).role === 'user' && <ThinkingMessage />}
+        messages.at(-1)?.role === 'user' && <ThinkingMessage />}
 
       <motion.div
         className="min-h-[24px] min-w-[24px] shrink-0"

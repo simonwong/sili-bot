@@ -18,7 +18,7 @@ const variants = {
     y: 0,
     opacity: 1,
     transition: {
-      y: { type: 'spring', stiffness: 800, damping: 30 }, // y方向使用弹簧动画
+      y: { type: 'spring' as const, stiffness: 800, damping: 30 }, // y方向使用弹簧动画
       opacity: { duration: 0.1 },
     },
   },
@@ -32,7 +32,7 @@ const variants = {
     y: -20, // 向上方 20px 的位置移动
     opacity: 0,
     transition: {
-      y: { type: 'spring', stiffness: 800, damping: 30 },
+      y: { type: 'spring' as const, stiffness: 800, damping: 30 },
       opacity: { duration: 0.1 },
     },
   },
