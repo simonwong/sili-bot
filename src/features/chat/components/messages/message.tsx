@@ -1,6 +1,6 @@
 import type { UIMessage } from 'ai';
 import { AnimatePresence, motion } from 'motion/react';
-import { Markdown } from '@/components/markdown';
+import { Streamdown } from 'streamdown';
 import { cn } from '@/lib/utils';
 import { PreviewAttachment } from '../chat-input-bar/preview-attachment';
 
@@ -52,7 +52,7 @@ export const Message: React.FC<MessageProps> = ({
               )}
               key={`${message.id}-text-${i}`}
             >
-              <Markdown>{text.text}</Markdown>
+              <Streamdown>{text.text}</Streamdown>
             </div>
           );
         })}

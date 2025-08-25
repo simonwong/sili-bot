@@ -4,7 +4,8 @@
   "linter": {
     "rules": {
       "nursery": {
-        "useNumericSeparators": "off"
+        "useNumericSeparators": "off",
+        "noUnknownAtRule": "off"
       }
     }
   }
