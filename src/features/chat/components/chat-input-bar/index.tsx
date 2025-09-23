@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import type { ChatStatus, FileUIPart, TextUIPart } from 'ai';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -103,6 +104,7 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
 }) => {
   const { textareaRef, onInput, input, resetTextarea } = useTextArea();
   const { fileParts, addFiles, resetFileParts } = useFileParts();
+  const queryClient = useQueryClient();
 
   const handleClickSend = async () => {
     window.history.replaceState({}, '', `/chat/${chatId}`);
@@ -117,6 +119,8 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
     });
     resetFileParts();
     resetTextarea();
+
+    queryClient.invalidateQueries({ queryKey: ['history'] });
 
     textareaRef.current?.focus();
   };

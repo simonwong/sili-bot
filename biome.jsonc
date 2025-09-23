@@ -6,6 +6,15 @@
       "nursery": {
         "useNumericSeparators": "off",
         "noUnknownAtRule": "off"
+      },
+      "performance": {
+        "useTopLevelRegex": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "useAwait": "off"
       }
     }
   }

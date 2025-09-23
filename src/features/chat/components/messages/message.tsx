@@ -1,15 +1,24 @@
-import type { UIMessage } from 'ai';
+import type { ChatStatus, UIMessage } from 'ai';
 import { AnimatePresence, motion } from 'motion/react';
 import { Streamdown } from 'streamdown';
+import {
+  Reasoning,
+  ReasoningContent,
+  ReasoningTrigger,
+} from '@/components/ai-elements/reasoning';
 import { cn } from '@/lib/utils';
 import { PreviewAttachment } from '../chat-input-bar/preview-attachment';
 
 export interface MessageProps {
   message: UIMessage;
+  isLastMessage: boolean;
+  status: ChatStatus;
   requiresScrollPadding: boolean;
 }
 
 export const Message: React.FC<MessageProps> = ({
+  isLastMessage,
+  status,
   message,
   requiresScrollPadding,
 }) => {
@@ -19,9 +28,6 @@ export const Message: React.FC<MessageProps> = ({
 
   const isUser = message.role === 'user';
   const isAssistant = message.role === 'assistant';
-
-  const fileParts = parts.filter((part) => part.type === 'file');
-  const textParts = parts.filter((part) => part.type === 'text');
 
   return (
     <AnimatePresence>
@@ -35,26 +41,42 @@ export const Message: React.FC<MessageProps> = ({
         data-role={message.role}
         initial={{ y: 5, opacity: 0 }}
       >
-        {fileParts.map((file, i) => {
-          return (
-            <PreviewAttachment
-              filePart={file}
-              key={`${message.id}-file-${i}`}
-            />
-          );
-        })}
-        {textParts.map((text, i) => {
-          return (
-            <div
-              className={cn(
-                'max-w-full',
-                isUser && 'rounded-3xl bg-muted px-5 py-2'
-              )}
-              key={`${message.id}-text-${i}`}
-            >
-              <Streamdown>{text.text}</Streamdown>
-            </div>
-          );
+        {parts.map((part, i) => {
+          switch (part.type) {
+            case 'reasoning':
+              return (
+                <Reasoning
+                  className="w-full"
+                  duration={undefined}
+                  isStreaming={status === 'streaming' && isLastMessage}
+                  key={`${message.id}-reasoning-${i}`}
+                >
+                  <ReasoningTrigger />
+                  <ReasoningContent>{part.text}</ReasoningContent>
+                </Reasoning>
+              );
+            case 'file':
+              return (
+                <PreviewAttachment
+                  filePart={part}
+                  key={`${message.id}-file-${i}`}
+                />
+              );
+            case 'text':
+              return (
+                <div
+                  className={cn(
+                    'max-w-full',
+                    isUser && 'rounded-3xl bg-muted px-5 py-2'
+                  )}
+                  key={`${message.id}-text-${i}`}
+                >
+                  <Streamdown>{part.text}</Streamdown>
+                </div>
+              );
+            default:
+              return null;
+          }
         })}
       </motion.div>
     </AnimatePresence>

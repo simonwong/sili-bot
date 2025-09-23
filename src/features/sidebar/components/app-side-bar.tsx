@@ -1,7 +1,7 @@
 'use client';
 import { MessageSquareDashedIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -13,12 +13,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/animate-ui/radix/sidebar';
-import { api } from '@/trpc/react';
+import { cn } from '@/lib/utils';
+import { useQueryHistory } from '@/store';
 import { AppLogo } from './app-logo';
 
 export const AppSidebar = () => {
   const router = useRouter();
-  const { data: conversations } = api.conversation.list.useQuery();
+  const params = useParams() as { id?: string };
+  const {
+    data = {
+      chats: [],
+    },
+  } = useQueryHistory();
 
   return (
     <Sidebar variant="floating">
@@ -48,10 +54,16 @@ export const AppSidebar = () => {
           <SidebarGroupLabel>聊天</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {conversations?.map((item) => (
+              {data.chats?.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton asChild>
-                    <Link href={`/chat/${item.id}`}>
+                    <Link
+                      className={cn(
+                        params.id === item.id &&
+                          'bg-accent text-accent-foreground'
+                      )}
+                      href={`/chat/${item.id}`}
+                    >
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>

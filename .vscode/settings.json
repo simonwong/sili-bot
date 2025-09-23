@@ -10,5 +10,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
-  }
+  },
+  "debug.node.autoAttach": "on",
+  "debug.javascript.usePreview": true,
+  "debug.javascript.unmapMissingSources": true,
+  "typescript.preferences.includePackageJsonAutoImports": "on"
 }

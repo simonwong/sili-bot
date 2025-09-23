@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { ChatInputBar, Messages } from '@/features/chat';
-import { cn } from '@/lib/utils';
+import { cn, generateUUID } from '@/lib/utils';
 import { useModelStore } from '@/store';
 
 export interface ChatProps {
@@ -14,12 +14,14 @@ export interface ChatProps {
 export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
   const { messages, sendMessage, status, stop } = useChat({
     id,
+    generateId: generateUUID,
     transport: new DefaultChatTransport({
       prepareSendMessagesRequest: (options) => {
         return {
+          api: '/api/chat',
           body: {
-            id: options.id,
             messages: options.messages,
+            id,
             model: useModelStore.getState().model,
           },
         };

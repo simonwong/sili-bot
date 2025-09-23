@@ -1,15 +1,15 @@
 import { SidebarTrigger } from '@/components/animate-ui/radix/sidebar';
+import { getMessagesByChatId } from '@/db/queries/message';
 import { Chat } from '@/features/chat';
 import { ModelSelect } from '@/features/model';
 import { cn } from '@/lib/utils';
-import { api } from '@/trpc/server';
 
 export default async function ChatPage(props: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await props.params;
 
-  const serverMessages = await api.message.list({ id });
+  const { messages } = await getMessagesByChatId({ chatId: id });
 
   return (
     <div className={cn('flex h-screen max-h-screen flex-1 flex-col')}>
@@ -17,7 +17,7 @@ export default async function ChatPage(props: {
         <SidebarTrigger />
         <ModelSelect />
       </div>
-      <Chat id={id} initialMessages={serverMessages} />
+      <Chat id={id} initialMessages={messages} />
     </div>
   );
 }

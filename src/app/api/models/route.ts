@@ -1,8 +1,8 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { NextResponse } from 'next/server';
 
-export const modelRouter = createTRPCRouter({
-  list: publicProcedure.query(() => {
-    return [
+export async function GET() {
+  try {
+    const models = [
       {
         provider: 'Gemini',
         models: [
@@ -17,5 +17,13 @@ export const modelRouter = createTRPCRouter({
         ],
       },
     ];
-  }),
-});
+
+    return NextResponse.json(models);
+  } catch (error) {
+    console.error('Error fetching models:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch models' },
+      { status: 500 }
+    );
+  }
+}

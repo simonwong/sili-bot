@@ -33,7 +33,7 @@ export const Messages: React.FC<MessagesProps> = ({
   return (
     <div
       className={cn(
-        'relative flex flex-col gap-6 overflow-y-scroll',
+        'relative flex flex-col gap-6 overflow-y-auto',
         messages.length > 0 && 'flex-1'
       )}
       ref={messagesContainerRef}
@@ -44,11 +44,13 @@ export const Messages: React.FC<MessagesProps> = ({
           {messages.map((message, index) => {
             return (
               <Message
+                isLastMessage={index === messages.length - 1}
                 key={message.id}
                 message={message}
                 requiresScrollPadding={
                   hasSentMessage && index === messages.length - 1
                 }
+                status={status}
               />
             );
           })}

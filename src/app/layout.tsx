@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
-import { TRPCReactProvider } from '@/trpc/react';
+import { ReactQueryProvider } from '@/lib/react-query-provider';
 
 import './globals.css';
 import {
@@ -41,12 +41,12 @@ export default function RootLayout({
           disableTransitionOnChange
           enableSystem
         >
-          <TRPCReactProvider>
+          <ReactQueryProvider>
             <SidebarProvider>
               <AppSidebar />
               <SidebarInset>{children}</SidebarInset>
             </SidebarProvider>
-          </TRPCReactProvider>
+          </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>

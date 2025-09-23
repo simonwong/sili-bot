@@ -11,33 +11,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { chatModelGroups, providerLogo } from '@/lib/ai/models';
 import { useModelStore } from '@/store';
-import { api } from '@/trpc/react';
-
-// logo: '/providers-logo/google.svg',
-
-const providerLogo = {
-  Gemini: '/providers-logo/google.svg',
-};
 
 export const ModelSelect = () => {
-  const { data } = api.model.list.useQuery();
   const { model, setModel } = useModelStore();
 
   useEffect(() => {
-    if (data?.length && data[0].models?.length && !model) {
+    if (
+      chatModelGroups?.length &&
+      chatModelGroups[0].models?.length &&
+      !model
+    ) {
       setModel({
-        provider: data[0].provider,
-        modelKey: data[0].models[0].modelKey,
+        provider: chatModelGroups[0].provider,
+        modelKey: chatModelGroups[0].models[0].id,
       });
     }
-  }, [data, setModel, model]);
+  }, [setModel, model]);
 
   return (
     <Select
       onValueChange={(value) => {
-        const providerItem = data?.find((item) =>
-          item.models.some((model) => model.modelKey === value)
+        const providerItem = chatModelGroups?.find((item) =>
+          item.models.some((modelItem) => modelItem.id === value)
         );
         if (providerItem) {
           setModel({
@@ -52,26 +49,26 @@ export const ModelSelect = () => {
         <SelectValue placeholder="Select Model" />
       </SelectTrigger>
       <SelectContent>
-        {data?.map((item) => {
+        {chatModelGroups?.map((group) => {
           return (
-            <SelectGroup key={item.provider}>
+            <SelectGroup key={group.provider}>
               <SelectLabel className="flex items-center gap-2">
-                {providerLogo[item.provider as keyof typeof providerLogo] && (
+                {providerLogo[group.provider as keyof typeof providerLogo] && (
                   <Image
-                    alt={item.provider}
+                    alt={group.provider}
                     height={16}
                     src={
-                      providerLogo[item.provider as keyof typeof providerLogo]
+                      providerLogo[group.provider as keyof typeof providerLogo]
                     }
                     width={16}
                   />
                 )}
-                {item.provider}
+                {group.provider}
               </SelectLabel>
-              {item.models.map((model) => {
+              {group.models.map((modelItem) => {
                 return (
-                  <SelectItem key={model.modelKey} value={model.modelKey}>
-                    {model.modelName}
+                  <SelectItem key={modelItem.id} value={modelItem.id}>
+                    {modelItem.name}
                   </SelectItem>
                 );
               })}
