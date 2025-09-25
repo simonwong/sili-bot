@@ -1,5 +1,6 @@
+import { SentIcon, StopCircleIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import type { ChatStatus } from 'ai';
-import { ArrowUpIcon, StopCircleIcon } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import type React from 'react';
 import { Button } from '@/components/ui/button';
@@ -73,7 +74,7 @@ export const ChatSendButton: React.FC<ChatSendButtonProps> = ({
             key="stop"
             variants={variants}
           >
-            <StopCircleIcon />
+            <HugeiconsIcon icon={StopCircleIcon} />
           </motion.div>
         ) : (
           <motion.div
@@ -84,7 +85,7 @@ export const ChatSendButton: React.FC<ChatSendButtonProps> = ({
             key="send"
             variants={variants}
           >
-            <ArrowUpIcon />
+            <HugeiconsIcon icon={SentIcon} />
           </motion.div>
         )}
       </AnimatePresence>

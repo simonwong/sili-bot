@@ -1,5 +1,6 @@
+import { AttachmentIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import type { ChatStatus } from 'ai';
-import { PaperclipIcon } from 'lucide-react';
 import type React from 'react';
 import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
@@ -40,7 +41,7 @@ export const UploadFileButton: React.FC<UploadFileButtonProps> = ({
         size="icon"
         variant="ghost"
       >
-        <PaperclipIcon />
+        <HugeiconsIcon icon={AttachmentIcon} />
       </Button>
     </>
   );

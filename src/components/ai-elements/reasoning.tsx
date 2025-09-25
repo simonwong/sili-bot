@@ -1,7 +1,8 @@
 'use client';
 
+import { AiBrain01Icon, ArrowDown01Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import { BrainIcon, ChevronDownIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { createContext, memo, useContext, useEffect, useState } from 'react';
 import {
@@ -136,13 +137,14 @@ export const ReasoningTrigger = memo(
       >
         {children ?? (
           <>
-            <BrainIcon className="size-4" />
+            <HugeiconsIcon className="size-4" icon={AiBrain01Icon} />
             {getThinkingMessage(isStreaming, duration)}
-            <ChevronDownIcon
+            <HugeiconsIcon
               className={cn(
                 'size-4 transition-transform',
                 isOpen ? 'rotate-180' : 'rotate-0'
               )}
+              icon={ArrowDown01Icon}
             />
           </>
         )}

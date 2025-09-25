@@ -1,4 +1,5 @@
-import { SparklesIcon } from 'lucide-react';
+import { Robot02Icon, SparklesIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 
@@ -21,7 +22,7 @@ export const ThinkingMessage = () => {
         )}
       >
         <div className="flex size-8 shrink-0 items-center justify-center rounded-full ring-1 ring-border">
-          <SparklesIcon size={14} />
+          <HugeiconsIcon icon={Robot02Icon} size={14} />
         </div>
 
         <div className="text-muted-foreground">Hmm...</div>
