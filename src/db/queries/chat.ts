@@ -40,3 +40,12 @@ export async function saveChat({
     throw new Error('Failed to save chat');
   }
 }
+
+export async function deleteChatById({ id }: { id: string }) {
+  try {
+    return await db.delete(chat).where(eq(chat.id, id));
+  } catch (error) {
+    console.error('error', error);
+    throw new Error('Failed to delete chat');
+  }
+}
