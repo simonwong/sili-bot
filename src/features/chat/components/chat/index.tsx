@@ -33,7 +33,7 @@ export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
   return (
     <div
       className={cn(
-        'm-auto flex w-full flex-1 flex-col overflow-hidden px-4',
+        'm-auto flex w-full flex-1 flex-col overflow-hidden',
         messages.length === 0 && 'justify-center'
       )}
     >

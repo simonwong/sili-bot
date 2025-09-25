@@ -33,7 +33,7 @@ export const Messages: React.FC<MessagesProps> = ({
   return (
     <div
       className={cn(
-        'relative flex flex-col gap-6 overflow-y-auto',
+        'relative flex flex-col gap-6 overflow-y-auto px-4',
         messages.length > 0 && 'flex-1'
       )}
       ref={messagesContainerRef}
