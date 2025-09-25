@@ -1,9 +1,13 @@
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { db } from '..';
 import { chat } from '../schema';
 
 export const getChatsByUserId = async ({ userId }: { userId: string }) => {
-  const chats = await db.select().from(chat).where(eq(chat.userId, userId));
+  const chats = await db
+    .select()
+    .from(chat)
+    .where(eq(chat.userId, userId))
+    .orderBy(desc(chat.createdAt));
   return {
     chats,
   };
