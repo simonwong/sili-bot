@@ -46,7 +46,7 @@ export const Message: React.FC<MessageProps> = ({
             case 'reasoning':
               return (
                 <Reasoning
-                  className="w-full"
+                  className='w-full'
                   defaultOpen={false}
                   duration={undefined}
                   isStreaming={status === 'streaming' && isLastMessage}

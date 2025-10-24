@@ -10,7 +10,12 @@ export const chatRoute = new Hono();
 const userId = 'test-user-id';
 
 chatRoute.post('/', async (c) => {
-  const { messages: uiMessages, model, id: chatId } = await c.req.json();
+  const {
+    messages: uiMessages,
+    model,
+    id: chatId,
+    type: chatType,
+  } = await c.req.json();
   const currentUserMessage = uiMessages.at(-1);
   const currentChat = await getChatById({ id: chatId });
 
@@ -27,23 +32,35 @@ chatRoute.post('/', async (c) => {
       parts: currentUserMessage.parts,
     },
   ]);
-
   const result = streamText({
     model: google(model.modelKey),
     messages: convertToModelMessages(uiMessages),
     providerOptions: {
-      google: {
-        thinkingConfig: {
-          includeThoughts: true,
-          thinkingBudget: -1,
-        },
-      },
+      google:
+        chatType === 'chat'
+          ? {
+              thinkingConfig: {
+                includeThoughts: true,
+                thinkingBudget: -1,
+              },
+            }
+          : {},
     },
-    onFinish: async ({ text, reasoning }) => {
+    onFinish: async ({ text, reasoning, files }) => {
       await saveMessages([
         {
           role: 'assistant',
-          parts: [...reasoning, { type: 'text', text }],
+          parts: [
+            ...reasoning,
+            { type: 'text', text },
+            ...(files?.map((file) => ({
+              type: 'file',
+              mediaType: file.mediaType,
+              // @ts-expect-error
+              filename: file.filename,
+              url: `data:${file.mediaType};base64,${file.base64}`,
+            })) || []),
+          ],
           chatId,
         },
       ]);

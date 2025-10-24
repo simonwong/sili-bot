@@ -16,16 +16,18 @@ export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
     id,
     generateId: generateUUID,
     transport: new DefaultChatTransport({
-      prepareSendMessagesRequest: (options) => {
-        return {
-          api: '/api/chat',
-          body: {
-            messages: options.messages,
-            id,
-            model: useModelStore.getState().model,
-          },
-        };
-      },
+      prepareSendMessagesRequest: (options) => ({
+        api: '/api/chat',
+        body: {
+          messages: options.messages,
+          id,
+          type: useModelStore.getState().type,
+          model:
+            useModelStore.getState().type === 'chat'
+              ? useModelStore.getState().chatModel
+              : useModelStore.getState().imageModel,
+        },
+      }),
     }),
     messages: initialMessages,
   });
@@ -38,8 +40,8 @@ export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
       )}
     >
       <Messages chatId={id} messages={messages} status={status} />
-      <div className="mb-12">
-        <div className="mx-auto max-w-2xl">
+      <div className='mb-12'>
+        <div className='mx-auto max-w-2xl'>
           <ChatInputBar
             chatId={id}
             sendMessage={(data) => {

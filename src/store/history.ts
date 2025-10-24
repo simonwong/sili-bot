@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-interface HistoryData {
+type HistoryData = {
   chats: Array<{ id: string; title: string }>;
-}
+};
 
-export const useQueryHistory = () => {
-  return useQuery({
+export const useQueryHistory = () =>
+  useQuery({
     queryKey: ['history'],
     queryFn: async () => {
       const response = await fetch('/api/history');
@@ -13,7 +13,6 @@ export const useQueryHistory = () => {
       return res;
     },
   });
-};
 
 export const useDeleteChat = () => {
   const queryClient = useQueryClient();

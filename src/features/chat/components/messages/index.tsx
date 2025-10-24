@@ -41,19 +41,17 @@ export const Messages: React.FC<MessagesProps> = ({
       {messages.length === 0 && <Greeting />}
       {messages.length > 0 && (
         <div>
-          {messages.map((message, index) => {
-            return (
-              <Message
-                isLastMessage={index === messages.length - 1}
-                key={message.id}
-                message={message}
-                requiresScrollPadding={
-                  hasSentMessage && index === messages.length - 1
-                }
-                status={status}
-              />
-            );
-          })}
+          {messages.map((message, index) => (
+            <Message
+              isLastMessage={index === messages.length - 1}
+              key={message.id}
+              message={message}
+              requiresScrollPadding={
+                hasSentMessage && index === messages.length - 1
+              }
+              status={status}
+            />
+          ))}
         </div>
       )}
 
@@ -62,7 +60,7 @@ export const Messages: React.FC<MessagesProps> = ({
         messages.at(-1)?.role === 'user' && <ThinkingMessage />}
 
       <motion.div
-        className="min-h-[24px] min-w-[24px] shrink-0"
+        className='min-h-[24px] min-w-[24px] shrink-0'
         onViewportEnter={onViewportEnter}
         onViewportLeave={onViewportLeave}
         ref={messagesEndRef}

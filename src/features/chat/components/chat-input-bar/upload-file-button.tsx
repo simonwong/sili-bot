@@ -20,7 +20,7 @@ export const UploadFileButton: React.FC<UploadFileButtonProps> = ({
   return (
     <>
       <input
-        className="pointer-events-none hidden"
+        className='pointer-events-none hidden'
         multiple
         onChange={(event) => {
           const files = Array.from(event.target.files || []);
@@ -29,17 +29,17 @@ export const UploadFileButton: React.FC<UploadFileButtonProps> = ({
         }}
         ref={fileInputRef}
         tabIndex={-1}
-        type="file"
+        type='file'
       />
       <Button
-        className="h-6 w-6"
+        className='size-6'
         disabled={isSending}
         onClick={(event) => {
           event.preventDefault();
           fileInputRef.current?.click();
         }}
-        size="icon"
-        variant="ghost"
+        size='icon'
+        variant='ghost'
       >
         <HugeiconsIcon icon={AttachmentIcon} />
       </Button>

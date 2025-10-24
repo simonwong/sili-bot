@@ -6,6 +6,7 @@ import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { ChatSendButton } from './chat-send-button';
+import { GenImageButton } from './gen-image-button';
 import { PreviewAttachment } from './preview-attachment';
 import { UploadFileButton } from './upload-file-button';
 
@@ -130,11 +131,11 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
   const isSending = status === 'streaming' || status === 'submitted';
 
   return (
-    <div className="relative w-full space-y-2 rounded-2xl border border-accent bg-muted p-2.5 pt-4">
+    <div className='relative w-full space-y-2 rounded-2xl border border-accent bg-muted p-2.5 pt-4'>
       {fileParts.length > 0 && (
         <div
-          className="flex flex-row items-end gap-2 overflow-x-scroll"
-          data-testid="attachments-preview"
+          className='flex flex-row items-end gap-2 overflow-x-scroll'
+          data-testid='attachments-preview'
         >
           {fileParts.map((filePart, index) => (
             <PreviewAttachment filePart={filePart} key={index} />
@@ -143,8 +144,8 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
       )}
       <Textarea
         autoFocus
-        className="!text-base max-h-[calc(35dvh)] min-h-[24px] resize-none overflow-y-auto border-none bg-transparent px-1 py-0 shadow-none outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent "
-        data-testid="multimodal-input"
+        className='!text-base max-h-[calc(35dvh)] min-h-[24px] resize-none overflow-y-auto border-none bg-transparent px-1 py-0 shadow-none outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent'
+        data-testid='multimodal-input'
         disabled={isSending}
         onChange={onInput}
         onKeyDown={(event) => {
@@ -159,14 +160,15 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
             }
           }
         }}
-        placeholder="询问任何问题..."
+        placeholder='询问任何问题...'
         ref={textareaRef}
         rows={2}
         value={input}
       />
-      <div className="flex w-full items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className='flex w-full items-center justify-between'>
+        <div className='flex items-center gap-2'>
           <UploadFileButton onAddFiles={addFiles} status={status} />
+          <GenImageButton />
         </div>
         <div>
           <ChatSendButton
