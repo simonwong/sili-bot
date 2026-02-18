@@ -1,18 +1,21 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite"],
+  "extends": [
+    "ultracite/core",
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/remix"
+  ],
   "linter": {
     "rules": {
-      "nursery": {
-        "useConsistentTypeDefinitions": "off"
-      },
       "performance": {
         "useTopLevelRegex": "off",
         "noBarrelFile": "off"
       },
       "style": {
         "useNumericSeparators": "off",
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useConsistentTypeDefinitions": "off"
       },
       "suspicious": {
         "useAwait": "off",
