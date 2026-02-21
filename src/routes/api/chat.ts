@@ -45,12 +45,23 @@ export const Route = createFileRoute('/api/chat')({
           type: chatType,
         } = await request.json();
         const currentUserMessage = uiMessages.at(-1);
-        const currentChat = await getChatById({ id: chatId });
+        if (!currentUserMessage || currentUserMessage.role !== 'user') {
+          return Response.json(
+            { message: 'Invalid chat payload: missing latest user message' },
+            { status: 400 }
+          );
+        }
+
+        const firstTextPart = currentUserMessage.parts.find(
+          (part: { type: string; text?: string }) => part.type === 'text'
+        );
+        const firstMessageText = firstTextPart?.text ?? 'New Conversation';
+        const currentChatPromise = getChatById({ id: chatId });
+        const titlePromise = generateTitle(firstMessageText);
+        const currentChat = await currentChatPromise;
 
         if (!currentChat) {
-          const { title } = await generateTitle(
-            currentUserMessage.parts[0].text
-          );
+          const { title } = await titlePromise;
           await saveChat({ id: chatId, title, userId });
         }
 
@@ -62,9 +73,11 @@ export const Route = createFileRoute('/api/chat')({
             parts: currentUserMessage.parts,
           },
         ]);
+
+        const modelMessages = await convertToModelMessages(uiMessages);
         const result = streamText({
           model: google(model.modelKey),
-          messages: convertToModelMessages(uiMessages),
+          messages: modelMessages,
           providerOptions: {
             google:
               chatType === 'chat'
@@ -84,7 +97,7 @@ export const Route = createFileRoute('/api/chat')({
                   ...reasoning,
                   { type: 'text', text },
                   ...(files?.map((file) => ({
-                    type: 'file',
+                    type: 'file' as const,
                     mediaType: file.mediaType,
                     // @ts-expect-error
                     filename: file.filename,

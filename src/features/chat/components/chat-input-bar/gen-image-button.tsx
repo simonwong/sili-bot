@@ -2,7 +2,7 @@ import { Album02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import type React from 'react';
 import { Button } from '@/components/ui/button';
-import { useModelStore } from '@/store';
+import { useModelStore } from '@/features/model';
 
 export const GenImageButton: React.FC = () => {
   const modelStore = useModelStore();

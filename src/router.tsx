@@ -6,7 +6,14 @@ import { routeTree } from './routeTree.gen';
 const NotFound = () => <div>Not Found</div>
 
 export function getRouter() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+      },
+    },
+  });
   const router = createRouter({
     routeTree,
     context: { queryClient },
@@ -28,7 +35,6 @@ declare module '@tanstack/react-router' {
     router: ReturnType<typeof getRouter>;
   }
 }
-
 
 
 

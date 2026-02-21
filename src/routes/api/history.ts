@@ -7,9 +7,7 @@ export const Route = createFileRoute('/api/history')({
   server: {
     handlers: {
       GET: async () => {
-        const res = await getChatsByUserId({ userId });
-        console.log('res', res);
-        return Response.json(res);
+        return Response.json(await getChatsByUserId({ userId }));
       },
     },
   },

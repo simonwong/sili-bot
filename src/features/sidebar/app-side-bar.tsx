@@ -5,7 +5,7 @@ import {
   MoreHorizontalIcon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { AppLogo } from '@/components/app-logo';
 import {
   DropdownMenu,
@@ -25,18 +25,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { useDeleteChat, useQueryHistory } from '@/store';
+import {
+  useDeleteHistoryChat,
+  useHistoryQuery,
+} from '@/features/history';
 
 export const ChatSidebar = () => {
   const navigate = useNavigate();
-  // const id = useParams({ from: '/chat/$id', select: (params) => params.id });
-  const {
-    data = {
-      chats: [],
-    },
-  } = useQueryHistory();
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+  const { data } = useHistoryQuery();
+  const chats = data?.chats ?? [];
 
-  const { mutate: deleteChatByIdMutation } = useDeleteChat();
+  const { mutate: deleteChatByIdMutation } = useDeleteHistoryChat();
 
   return (
     <Sidebar variant='floating'>
@@ -62,19 +64,16 @@ export const ChatSidebar = () => {
           <SidebarGroupLabel>聊天</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {data.chats?.map((item) => (
+              {chats.map((item) => (
                 <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton>
-                    {/* <Link
-                      className={cn(
-                        id === item.id &&
-                          'bg-accent text-accent-foreground'
-                      )}
+                  <SidebarMenuButton isActive={pathname === `/chat/${item.id}`}>
+                    <Link
+                      className='flex min-w-0 flex-1 items-center'
                       params={{ id: item.id }}
                       to='/chat/$id'
                     >
-                      <span>{item.title}</span>
-                    </Link> */}
+                      <span className='truncate'>{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                   <DropdownMenu>
                     <DropdownMenuTrigger>

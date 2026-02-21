@@ -1,4 +1,5 @@
 import { asc, eq } from 'drizzle-orm';
+import type { UIDataTypes, UIMessagePart, UITools } from 'ai';
 import { db } from '..';
 import { messages } from '../schema';
 
@@ -30,7 +31,7 @@ export async function saveMessages(
     id?: string;
     chatId: string;
     role: string;
-    parts: unknown;
+    parts: UIMessagePart<UIDataTypes, UITools>[];
   }>
 ) {
   try {

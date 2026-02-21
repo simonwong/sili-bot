@@ -5,6 +5,7 @@ import type { ChatStatus, FileUIPart, TextUIPart } from 'ai';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
+import { historyQueryKey } from '@/features/history/api';
 import { ChatSendButton } from './chat-send-button';
 import { GenImageButton } from './gen-image-button';
 import { PreviewAttachment } from './preview-attachment';
@@ -121,7 +122,7 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
     resetFileParts();
     resetTextarea();
 
-    queryClient.invalidateQueries({ queryKey: ['history'] });
+    queryClient.invalidateQueries({ queryKey: historyQueryKey });
 
     textareaRef.current?.focus();
   };

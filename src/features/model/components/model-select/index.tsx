@@ -14,7 +14,7 @@ import {
   imageModelGroups,
   providerLogo,
 } from '@/lib/ai/models';
-import { useModelStore } from '@/store';
+import { useModelStore } from '@/features/model';
 
 export const ModelSelect = () => {
   const { chatModel, imageModel, type, setModel } = useModelStore();
@@ -25,6 +25,10 @@ export const ModelSelect = () => {
   return (
     <Select
       onValueChange={(value) => {
+        if (!value) {
+          return;
+        }
+
         const providerItem = modelGroups?.find((item) =>
           item.models.some((modelItem) => modelItem.id === value)
         );

@@ -8,7 +8,6 @@ import {
 import { ThemeProvider } from '@/components/theme-provider';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { ChatSidebar } from '@/features/sidebar';
-import { ReactQueryProvider } from '@/lib/react-query-provider';
 import appCss from '@/styles/globals.css?url';
 
 const RootLayout = () => (
@@ -23,12 +22,10 @@ const RootLayout = () => (
         disableTransitionOnChange
         enableSystem
       >
-        <ReactQueryProvider>
-          <SidebarProvider>
-            <ChatSidebar />
-            <Outlet />
-          </SidebarProvider>
-        </ReactQueryProvider>
+        <SidebarProvider>
+          <ChatSidebar />
+          <Outlet />
+        </SidebarProvider>
       </ThemeProvider>
       <Scripts />
     </body>

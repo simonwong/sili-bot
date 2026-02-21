@@ -1,44 +1,36 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
-import useSWR from 'swr';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type ScrollFlag = ScrollBehavior | false;
 
 export function useScrollToBottom() {
   const containerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
-
-  const { data: isAtBottom = false, mutate: setIsAtBottom } = useSWR(
-    'messages:is-at-bottom',
-    null,
-    { fallbackData: false }
-  );
-
-  const { data: scrollBehavior = false, mutate: setScrollBehavior } =
-    useSWR<ScrollFlag>('messages:should-scroll', null, { fallbackData: false });
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const [scrollBehavior, setScrollBehavior] = useState<ScrollFlag>(false);
 
   useEffect(() => {
     if (scrollBehavior) {
       endRef.current?.scrollIntoView({ behavior: scrollBehavior });
-      setScrollBehavior(false);
+      setScrollBehavior(() => false);
     }
-  }, [setScrollBehavior, scrollBehavior]);
+  }, [scrollBehavior]);
 
   const scrollToBottom = useCallback(
-    (scrollBehavior: ScrollBehavior = 'smooth') => {
-      setScrollBehavior(scrollBehavior);
+    (nextScrollBehavior: ScrollBehavior = 'smooth') => {
+      setScrollBehavior(nextScrollBehavior);
     },
-    [setScrollBehavior]
+    []
   );
 
-  function onViewportEnter() {
+  const onViewportEnter = useCallback(() => {
     setIsAtBottom(true);
-  }
+  }, []);
 
-  function onViewportLeave() {
+  const onViewportLeave = useCallback(() => {
     setIsAtBottom(false);
-  }
+  }, []);
 
   return {
     containerRef,

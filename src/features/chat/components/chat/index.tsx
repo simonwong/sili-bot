@@ -1,8 +1,9 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
-import { ChatInputBar, Messages } from '@/features/chat';
 import { cn, generateUUID } from '@/lib/utils';
-import { useModelStore } from '@/store';
+import { useModelStore } from '@/features/model';
+import { ChatInputBar } from '../chat-input-bar';
+import { Messages } from '../messages';
 
 export interface ChatProps {
   id: string;
