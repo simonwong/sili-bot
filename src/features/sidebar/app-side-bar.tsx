@@ -5,14 +5,14 @@ import {
   MoreHorizontalIcon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { AppLogo } from '@/components/app-logo';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/animate-ui/components/radix/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import {
   Sidebar,
   SidebarContent,
@@ -24,14 +24,12 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/animate-ui/radix/sidebar';
-import { cn } from '@/lib/utils';
+} from '@/components/ui/sidebar';
 import { useDeleteChat, useQueryHistory } from '@/store';
-import { AppLogo } from './app-logo';
 
-export const AppSidebar = () => {
-  const router = useRouter();
-  const params = useParams() as { id?: string };
+export const ChatSidebar = () => {
+  const navigate = useNavigate();
+  // const id = useParams({ from: '/chat/$id', select: (params) => params.id });
   const {
     data = {
       chats: [],
@@ -41,21 +39,17 @@ export const AppSidebar = () => {
   const { mutate: deleteChatByIdMutation } = useDeleteChat();
 
   return (
-    <Sidebar variant="floating">
-      <SidebarHeader className="flex">
-        <AppLogo
-          className="cursor-pointer"
-          onClick={() => router.push('/')}
-          size={45}
-        />
+    <Sidebar variant='floating'>
+      <SidebarHeader className='flex'>
+        <AppLogo className='cursor-pointer' size={45} />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/">
+                <SidebarMenuButton>
+                  <Link className='flex items-center gap-2' to='/'>
                     <HugeiconsIcon icon={ChatAdd01Icon} />
                     新的聊天
                   </Link>
@@ -70,35 +64,38 @@ export const AppSidebar = () => {
             <SidebarMenu>
               {data.chats?.map((item) => (
                 <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton asChild>
-                    <Link
+                  <SidebarMenuButton>
+                    {/* <Link
                       className={cn(
-                        params.id === item.id &&
+                        id === item.id &&
                           'bg-accent text-accent-foreground'
                       )}
-                      href={`/chat/${item.id}`}
+                      params={{ id: item.id }}
+                      to='/chat/$id'
                     >
                       <span>{item.title}</span>
-                    </Link>
+                    </Link> */}
                   </SidebarMenuButton>
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger>
                       <SidebarMenuAction showOnHover>
                         <HugeiconsIcon icon={MoreHorizontalIcon} />
-                        <span className="sr-only">More</span>
+                        <span className='sr-only'>More</span>
                       </SidebarMenuAction>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       align={'start'}
-                      className="w-48 rounded-lg"
+                      className='w-48 rounded-lg'
                       side={'right'}
                     >
                       <DropdownMenuItem
                         onClick={() => {
                           deleteChatByIdMutation({ id: item.id });
-                          router.push('/');
+                          navigate({
+                            to: '/',
+                          });
                         }}
-                        variant="destructive"
+                        variant='destructive'
                       >
                         <HugeiconsIcon icon={Delete02Icon} />
                         <span>Delete</span>

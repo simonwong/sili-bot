@@ -8,8 +8,12 @@ export const useQueryHistory = () =>
   useQuery({
     queryKey: ['history'],
     queryFn: async () => {
+      console.log('111', 111);
       const response = await fetch('/api/history');
+      console.log('222', 222);
       const res = await response.json();
+      console.log('333', 222);
+      console.log('res', res);
       return res;
     },
   });

@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import {
   Select,
   SelectContent,
@@ -46,14 +45,16 @@ export const ModelSelect = () => {
           <SelectGroup key={group.provider}>
             <SelectLabel className='flex items-center gap-2'>
               {providerLogo[group.provider as keyof typeof providerLogo] && (
-                <Image
-                  alt={group.provider}
-                  height={16}
-                  src={
-                    providerLogo[group.provider as keyof typeof providerLogo]
-                  }
-                  width={16}
-                />
+                <picture>
+                  <img
+                    alt={group.provider}
+                    height={16}
+                    src={
+                      providerLogo[group.provider as keyof typeof providerLogo]
+                    }
+                    width={16}
+                  />
+                </picture>
               )}
               {group.provider}
             </SelectLabel>

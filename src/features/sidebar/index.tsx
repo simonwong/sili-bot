@@ -1,1 +1,1 @@
-export * from './components/app-side-bar';
+export * from './app-side-bar';
