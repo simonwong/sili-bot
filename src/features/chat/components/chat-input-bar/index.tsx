@@ -7,18 +7,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { historyQueryKey } from '@/features/history/api';
 import { ChatSendButton } from './chat-send-button';
-import { GenImageButton } from './gen-image-button';
 import { PreviewAttachment } from './preview-attachment';
 import { UploadFileButton } from './upload-file-button';
 
 export interface ChatInputBarProps {
+  chatId: string;
   sendMessage: (data: {
     textParts?: TextUIPart[];
     fileParts?: FileUIPart[];
   }) => Promise<void>;
-  stop: () => Promise<void>;
   status: ChatStatus;
-  chatId: string;
+  stop: () => Promise<void>;
 }
 
 const useTextArea = () => {
@@ -138,8 +137,11 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
           className='flex flex-row items-end gap-2 overflow-x-scroll'
           data-testid='attachments-preview'
         >
-          {fileParts.map((filePart, index) => (
-            <PreviewAttachment filePart={filePart} key={index} />
+          {fileParts.map((filePart) => (
+            <PreviewAttachment
+              filePart={filePart}
+              key={filePart.url ?? filePart.filename ?? 'attachment'}
+            />
           ))}
         </div>
       )}
@@ -169,7 +171,6 @@ export const ChatInputBar: React.FC<ChatInputBarProps> = ({
       <div className='flex w-full items-center justify-between'>
         <div className='flex items-center gap-2'>
           <UploadFileButton onAddFiles={addFiles} status={status} />
-          <GenImageButton />
         </div>
         <div>
           <ChatSendButton

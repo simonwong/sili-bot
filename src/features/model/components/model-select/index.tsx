@@ -9,18 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  chatModelGroups,
-  imageModelGroups,
-  providerLogo,
-} from '@/lib/ai/models';
 import { useModelStore } from '@/features/model';
+import { chatModelGroups, providerLogo } from '@/lib/ai/models';
 
 export const ModelSelect = () => {
-  const { chatModel, imageModel, type, setModel } = useModelStore();
-
-  const modelGroups = type === 'chat' ? chatModelGroups : imageModelGroups;
-  const model = type === 'chat' ? chatModel : imageModel;
+  const { chatModel, setModel } = useModelStore();
 
   return (
     <Select
@@ -29,7 +22,7 @@ export const ModelSelect = () => {
           return;
         }
 
-        const providerItem = modelGroups?.find((item) =>
+        const providerItem = chatModelGroups.find((item) =>
           item.models.some((modelItem) => modelItem.id === value)
         );
         if (providerItem) {
@@ -39,13 +32,13 @@ export const ModelSelect = () => {
           });
         }
       }}
-      value={model?.modelKey ?? undefined}
+      value={chatModel?.modelKey ?? undefined}
     >
       <SelectTrigger className='min-w-[180px]'>
         <SelectValue placeholder='Select Model' />
       </SelectTrigger>
       <SelectContent>
-        {modelGroups?.map((group) => (
+        {chatModelGroups.map((group) => (
           <SelectGroup key={group.provider}>
             <SelectLabel className='flex items-center gap-2'>
               {providerLogo[group.provider as keyof typeof providerLogo] && (

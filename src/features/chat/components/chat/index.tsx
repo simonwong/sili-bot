@@ -1,7 +1,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
-import { cn, generateUUID } from '@/lib/utils';
 import { useModelStore } from '@/features/model';
+import { cn, generateUUID } from '@/lib/utils';
 import { ChatInputBar } from '../chat-input-bar';
 import { Messages } from '../messages';
 
@@ -20,11 +20,7 @@ export const Chat: React.FC<ChatProps> = ({ id, initialMessages }) => {
         body: {
           messages: options.messages,
           id,
-          type: useModelStore.getState().type,
-          model:
-            useModelStore.getState().type === 'chat'
-              ? useModelStore.getState().chatModel
-              : useModelStore.getState().imageModel,
+          model: useModelStore.getState().chatModel,
         },
       }),
     }),

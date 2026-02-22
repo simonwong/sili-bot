@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { convertToModelMessages, generateText, streamText } from 'ai';
 import { getChatById, saveChat } from '@/db/queries';
 import { saveMessages } from '@/db/queries/message';
+import { BaseModel } from '@/lib/ai/models';
 
 export const generateTitle = async (
   message: string
@@ -11,7 +12,7 @@ export const generateTitle = async (
 }> => {
   try {
     const result = await generateText({
-      model: google('gemini-2.5-flash-preview-05-20'),
+      model: google(BaseModel.modelKey),
       prompt: `Based on this first message from a user, generate a concise, descriptive title for the conversation (max 6 words, no quotes):
 
 User message: "${message}"
@@ -42,7 +43,6 @@ export const Route = createFileRoute('/api/chat')({
           messages: uiMessages,
           model,
           id: chatId,
-          type: chatType,
         } = await request.json();
         const currentUserMessage = uiMessages.at(-1);
         if (!currentUserMessage || currentUserMessage.role !== 'user') {
@@ -79,31 +79,18 @@ export const Route = createFileRoute('/api/chat')({
           model: google(model.modelKey),
           messages: modelMessages,
           providerOptions: {
-            google:
-              chatType === 'chat'
-                ? {
-                    thinkingConfig: {
-                      includeThoughts: true,
-                      thinkingBudget: -1,
-                    },
-                  }
-                : {},
+            google: {
+              thinkingConfig: {
+                includeThoughts: true,
+                thinkingBudget: -1,
+              },
+            },
           },
-          onFinish: async ({ text, reasoning, files }) => {
+          onFinish: async ({ text, reasoning }) => {
             await saveMessages([
               {
                 role: 'assistant',
-                parts: [
-                  ...reasoning,
-                  { type: 'text', text },
-                  ...(files?.map((file) => ({
-                    type: 'file' as const,
-                    mediaType: file.mediaType,
-                    // @ts-expect-error
-                    filename: file.filename,
-                    url: `data:${file.mediaType};base64,${file.base64}`,
-                  })) || []),
-                ],
+                parts: [...reasoning, { type: 'text', text }],
                 chatId,
               },
             ]);

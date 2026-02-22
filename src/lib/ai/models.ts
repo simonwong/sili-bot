@@ -1,14 +1,14 @@
 export const DEFAULT_CHAT_MODEL: string = 'chat-model';
 
 export interface ChatModel {
+  description?: string;
   id: string;
   name: string;
-  description?: string;
 }
 
 export interface ChatModelGroup {
-  provider: string;
   models: ChatModel[];
+  provider: string;
 }
 
 export const chatModelGroups: ChatModelGroup[] = [
@@ -16,24 +16,8 @@ export const chatModelGroups: ChatModelGroup[] = [
     provider: 'Gemini',
     models: [
       {
-        id: 'gemini-2.5-flash',
-        name: 'Gemini 2.5 Flash',
-      },
-      {
-        id: 'gemini-2.5-pro',
-        name: 'Gemini 2.5 Pro',
-      },
-    ],
-  },
-];
-
-export const imageModelGroups: ChatModelGroup[] = [
-  {
-    provider: 'Gemini',
-    models: [
-      {
-        id: 'gemini-2.5-flash-image-preview',
-        name: 'Nano Banana',
+        id: 'gemini-3-flash-preview',
+        name: 'Gemini 3 Flash preview',
       },
     ],
   },
@@ -41,11 +25,12 @@ export const imageModelGroups: ChatModelGroup[] = [
 
 export const DefaultChatModel = {
   provider: 'Gemini',
-  modelKey: 'gemini-2.5-flash',
+  modelKey: 'gemini-3-flash-preview',
 };
-export const DefaultImageModel = {
+
+export const BaseModel = {
   provider: 'Gemini',
-  modelKey: 'gemini-2.5-flash-image-preview',
+  modelKey: 'gemini-3-flash-preview',
 };
 
 export const providerLogo = {
