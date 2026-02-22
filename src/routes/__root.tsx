@@ -11,7 +11,7 @@ import { ChatSidebar } from '@/features/sidebar';
 import appCss from '@/styles/globals.css?url';
 
 const RootLayout = () => (
-  <html lang='en'>
+  <html lang='en' suppressHydrationWarning>
     <head>
       <HeadContent />
     </head>

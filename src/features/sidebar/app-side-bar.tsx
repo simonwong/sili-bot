@@ -25,10 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import {
-  useDeleteHistoryChat,
-  useHistoryQuery,
-} from '@/features/history';
+import { useDeleteHistoryChat, useHistoryQuery } from '@/features/history';
 
 export const ChatSidebar = () => {
   const navigate = useNavigate();
@@ -50,11 +47,9 @@ export const ChatSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Link className='flex items-center gap-2' to='/'>
-                    <HugeiconsIcon icon={ChatAdd01Icon} />
-                    新的聊天
-                  </Link>
+                <SidebarMenuButton render={<Link to='/' />}>
+                  <HugeiconsIcon icon={ChatAdd01Icon} />
+                  <span>新的聊天</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -66,21 +61,18 @@ export const ChatSidebar = () => {
             <SidebarMenu>
               {chats.map((item) => (
                 <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton isActive={pathname === `/chat/${item.id}`}>
-                    <Link
-                      className='flex min-w-0 flex-1 items-center'
-                      params={{ id: item.id }}
-                      to='/chat/$id'
-                    >
-                      <span className='truncate'>{item.title}</span>
-                    </Link>
+                  <SidebarMenuButton
+                    isActive={pathname === `/chat/${item.id}`}
+                    render={<Link params={{ id: item.id }} to='/chat/$id' />}
+                  >
+                    <span className='truncate'>{item.title}</span>
                   </SidebarMenuButton>
                   <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <SidebarMenuAction showOnHover>
-                        <HugeiconsIcon icon={MoreHorizontalIcon} />
-                        <span className='sr-only'>More</span>
-                      </SidebarMenuAction>
+                    <DropdownMenuTrigger
+                      render={<SidebarMenuAction showOnHover />}
+                    >
+                      <HugeiconsIcon icon={MoreHorizontalIcon} />
+                      <span className='sr-only'>More</span>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       align={'start'}

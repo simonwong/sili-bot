@@ -86,11 +86,8 @@ function SidebarProvider({
     [setOpenProp, open]
   );
 
-  console.log('open', open);
-
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    console.log('isMobile', isMobile);
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
   }, [isMobile, setOpen, setOpenMobile]);
 
