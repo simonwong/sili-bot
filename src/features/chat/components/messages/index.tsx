@@ -1,17 +1,19 @@
 'use client';
 
 import type { ChatStatus, UIMessage } from 'ai';
-import { motion } from 'motion/react';
 import type React from 'react';
-import { cn } from '@/lib/utils';
-import { useMessages } from '../../hooks/use-messages';
+import { useEffect, useState } from 'react';
+import {
+  Conversation,
+  ConversationContent,
+} from '@/components/ai-elements/conversation';
 import { Greeting } from './greeting';
 import { Message } from './message';
 import { ThinkingMessage } from './thinking-message';
 
 export interface MessagesProps {
-  messages: UIMessage[];
   chatId: string;
+  messages: UIMessage[];
   status: ChatStatus;
 }
 
@@ -20,26 +22,31 @@ export const Messages: React.FC<MessagesProps> = ({
   chatId,
   status,
 }) => {
-  const {
-    containerRef: messagesContainerRef,
-    endRef: messagesEndRef,
-    onViewportEnter,
-    onViewportLeave,
-    hasSentMessage,
-  } = useMessages({
-    chatId,
-    status,
-  });
+  const [hasSentMessage, setHasSentMessage] = useState(false);
+
+  useEffect(() => {
+    if (chatId) {
+      setHasSentMessage(false);
+    }
+  }, [chatId]);
+
+  useEffect(() => {
+    if (status === 'submitted') {
+      setHasSentMessage(true);
+    }
+  }, [status]);
+
+  if (messages.length === 0) {
+    return (
+      <div className='relative flex flex-col gap-6 px-4'>
+        <Greeting />
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={cn(
-        'relative flex flex-col gap-6 overflow-y-auto px-4',
-        messages.length > 0 && 'flex-1'
-      )}
-      ref={messagesContainerRef}
-    >
-      {messages.length === 0 && <Greeting />}
-      {messages.length > 0 && (
+    <Conversation>
+      <ConversationContent className='gap-0 px-4'>
         <div>
           {messages.map((message, index) => (
             <Message
@@ -53,18 +60,10 @@ export const Messages: React.FC<MessagesProps> = ({
             />
           ))}
         </div>
-      )}
-
-      {status === 'submitted' &&
-        messages.length > 0 &&
-        messages.at(-1)?.role === 'user' && <ThinkingMessage />}
-
-      <motion.div
-        className='min-h-[24px] min-w-[24px] shrink-0'
-        onViewportEnter={onViewportEnter}
-        onViewportLeave={onViewportLeave}
-        ref={messagesEndRef}
-      />
-    </div>
+        {status === 'submitted' && messages.at(-1)?.role === 'user' && (
+          <ThinkingMessage />
+        )}
+      </ConversationContent>
+    </Conversation>
   );
 };
