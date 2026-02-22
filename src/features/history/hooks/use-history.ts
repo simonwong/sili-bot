@@ -15,6 +15,7 @@ export const useHistoryQuery = (): UseQueryResult<HistoryResponse> =>
   useQuery({
     queryKey: historyQueryKey,
     queryFn: fetchHistory,
+    enabled: typeof window !== 'undefined',
   });
 
 export const useDeleteHistoryChat = () => {

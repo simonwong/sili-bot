@@ -20,5 +20,5 @@ export const chatMessagesQueryOptions = (chatId: string) =>
   queryOptions({
     queryKey: chatMessagesQueryKey(chatId),
     queryFn: () => fetchChatMessages(chatId),
-    enabled: Boolean(chatId),
+    enabled: Boolean(chatId) && typeof window !== 'undefined',
   });

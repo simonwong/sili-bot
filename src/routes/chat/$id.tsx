@@ -8,9 +8,9 @@ import { cn } from '@/lib/utils';
 export const Route = createFileRoute('/chat/$id')({
   component: ChatPage,
   loader: async ({ context, params }) => {
-    await context.queryClient.ensureQueryData(
-      chatMessagesQueryOptions(params.id)
-    );
+    if (typeof window !== 'undefined') {
+      await context.queryClient.ensureQueryData(chatMessagesQueryOptions(params.id));
+    }
 
     return {
       chatId: params.id,
