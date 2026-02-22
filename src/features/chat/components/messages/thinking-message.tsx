@@ -1,4 +1,4 @@
-import { Robot02Icon, SparklesIcon } from '@hugeicons/core-free-icons';
+import { Robot02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
@@ -9,7 +9,7 @@ export const ThinkingMessage = () => {
   return (
     <motion.div
       animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
-      className="group/message mx-auto min-h-96 w-full max-w-3xl px-4"
+      className='group/message mx-auto min-h-96 w-full max-w-3xl px-4'
       data-role={role}
       initial={{ y: 5, opacity: 0 }}
     >
@@ -21,11 +21,11 @@ export const ThinkingMessage = () => {
           }
         )}
       >
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-full ring-1 ring-border">
+        <div className='flex size-8 shrink-0 items-center justify-center rounded-full ring-1 ring-border'>
           <HugeiconsIcon icon={Robot02Icon} size={14} />
         </div>
 
-        <div className="text-muted-foreground">Hmm...</div>
+        <div className='text-muted-foreground'>Hmm...</div>
       </div>
     </motion.div>
   );
